@@ -1,0 +1,10 @@
+# Directories
+node_modules/
+dist/
+build/
+.vscode/
+
+# Files
+.env
+.DS_Store
+package-lock.json
