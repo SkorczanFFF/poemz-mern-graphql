@@ -3,7 +3,11 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLNonNull,
+  GraphQLList,
 } from "graphql/type";
+import Poem from "../models/Poem";
+import Comment from "../models/Comment";
+import User from "../models/User";
 
 export const UserType = new GraphQLObjectType({
   name: "UserType",
@@ -12,6 +16,18 @@ export const UserType = new GraphQLObjectType({
     name: { type: GraphQLNonNull(GraphQLString) },
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
+    poems: {
+      type: GraphQLList(PoemType),
+      async resolve(parent) {
+        return await Poem.find({ user: parent.id });
+      },
+    },
+    comments: {
+      type: GraphQLList(CommentType),
+      async resolve(parent) {
+        return await Comment.find({ user: parent.id });
+      },
+    },
   }),
 });
 
@@ -22,6 +38,18 @@ export const PoemType = new GraphQLObjectType({
     title: { type: GraphQLNonNull(GraphQLString) },
     content: { type: GraphQLNonNull(GraphQLString) },
     date: { type: GraphQLNonNull(GraphQLString) },
+    user: {
+      type: UserType,
+      async resolve(parent) {
+        return await User.findById(parent.user);
+      },
+    },
+    comments: {
+      type: GraphQLList(CommentType),
+      async resolve(parent) {
+        return await Comment.find({ poem: parent.id });
+      },
+    },
   }),
 });
 
@@ -31,5 +59,17 @@ export const CommentType = new GraphQLObjectType({
     id: { type: GraphQLNonNull(GraphQLID) },
     text: { type: GraphQLNonNull(GraphQLString) },
     date: { type: GraphQLNonNull(GraphQLString) },
+    user: {
+      type: UserType,
+      async resolve(parent) {
+        return await User.findById(parent.user);
+      },
+    },
+    poem: {
+      type: PoemType,
+      async resolve(parent) {
+        return await Poem.findById(parent.poem);
+      },
+    },
   }),
 });

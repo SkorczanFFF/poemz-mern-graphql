@@ -15,6 +15,8 @@ const userSchema: Schema = new Schema({
     required: true,
     minLength: 6,
   },
+  poems: [{ type: Schema.Types.ObjectId, ref: "Poem" }],
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 });
 
 export default model("User", userSchema);
