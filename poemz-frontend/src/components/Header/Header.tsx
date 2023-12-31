@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AppBar, Button, Tab, Tabs, Toolbar } from "@mui/material";
 import Box from "@mui/material/Box";
 import { headerStyles } from "../../styles/header.styles";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -16,10 +17,21 @@ const Header = () => {
             value={tabValue}
             onChange={(e, value: number) => setTabValue(value)}
           >
-            <Tab disableRipple label="Home" sx={headerStyles.singleTab} />
-            <Tab disableRipple label="Poems" />
+            {/* @ts-ignore */}
+            <Tab
+              disableRipple
+              LinkComponent={Link}
+              to="/"
+              label="Home"
+              sx={headerStyles.singleTab}
+            />
+            {/* @ts-ignore */}
+            <Tab disableRipple LinkComponent={Link} to="/poems" label="Poems" />
           </Tabs>
-          <Button sx={headerStyles.loginButton}>Sign in</Button>
+          {/* @ts-ignore */}
+          <Button LinkComponent={Link} to="/auth" sx={headerStyles.loginButton}>
+            Login
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>

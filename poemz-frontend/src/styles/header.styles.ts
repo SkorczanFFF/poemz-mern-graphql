@@ -20,7 +20,7 @@ export const headerStyles: Styles = {
     alignItems: "center",
   },
   singleTab: {
-    height: "64px",
+    height: "65px",
   },
   loginButton: {
     color: "white",
