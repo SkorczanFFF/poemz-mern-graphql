@@ -26,6 +26,9 @@ export const authStyles: Styles = {
     flexDirection: "column",
     gap: "4px",
   },
+  input: {
+    minWidth: "280px",
+  },
   submitBtn: {
     backgroundColor: "wheat",
     text: "white",
