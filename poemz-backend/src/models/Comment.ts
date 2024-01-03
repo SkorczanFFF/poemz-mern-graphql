@@ -9,8 +9,14 @@ const commentSchema: Schema = new Schema({
     type: Date,
     required: true,
   },
-  poem: { type: Schema.Types.ObjectId, ref: "Poem" },
-  users: { type: Schema.Types.ObjectId, ref: "User" },
+  poem: {
+    type: Schema.Types.ObjectId,
+    ref: "Poem",
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 export default model("Comment", commentSchema);

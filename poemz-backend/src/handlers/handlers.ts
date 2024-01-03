@@ -53,10 +53,9 @@ const mutations = new GraphQLObjectType({
         email: { type: GraphQLNonNull(GraphQLString) },
         password: { type: GraphQLNonNull(GraphQLString) },
       },
-      async resolve({ name, email, password }) {
-        let existingUser: DocumentType;
+      async resolve(parent, { name, email, password }) {
         try {
-          existingUser = await User.findOne({ email });
+          let existingUser = await User.findOne({ email });
           if (existingUser) {
             throw new Error("User with this email already exists!");
           }
@@ -68,6 +67,7 @@ const mutations = new GraphQLObjectType({
         }
       },
     },
+
     // user signin
     signin: {
       type: UserType,
@@ -75,7 +75,7 @@ const mutations = new GraphQLObjectType({
         email: { type: GraphQLNonNull(GraphQLString) },
         password: { type: GraphQLNonNull(GraphQLString) },
       },
-      async resolve({ email, password }) {
+      async resolve(parent, { email, password }) {
         let existingUser: DocumentType;
         try {
           existingUser = await User.findOne({ email });
@@ -107,7 +107,7 @@ const mutations = new GraphQLObjectType({
         date: { type: GraphQLNonNull(GraphQLString) },
         user: { type: GraphQLNonNull(GraphQLID) },
       },
-      async resolve({ title, content, date, user }) {
+      async resolve(parent, { title, content, date, user }) {
         let poem: DocumentType;
         const session = await startSession();
         try {
@@ -136,7 +136,7 @@ const mutations = new GraphQLObjectType({
         title: { type: GraphQLNonNull(GraphQLString) },
         content: { type: GraphQLNonNull(GraphQLString) },
       },
-      async resolve({ id, title, content }) {
+      async resolve(parent, { id, title, content }) {
         let existingPoem: DocumentType;
         try {
           existingPoem = await Poem.findById(id);
@@ -159,7 +159,7 @@ const mutations = new GraphQLObjectType({
       args: {
         id: { type: GraphQLNonNull(GraphQLID) },
       },
-      async resolve({ id }) {
+      async resolve(parent, { id }) {
         let existingPoem: DocumentType;
         const session = await startSession();
         try {
@@ -176,7 +176,7 @@ const mutations = new GraphQLObjectType({
           existingUser.poems.pull(existingPoem);
           await existingUser.save({ session });
 
-          return await Poem.findByIdAndRemove(id);
+          return await Poem.deleteOne({ id: existingPoem.id });
         } catch (err) {
           throw new Error(err);
         } finally {
@@ -221,41 +221,41 @@ const mutations = new GraphQLObjectType({
         }
       },
     },
-    //delete comment from poem
-    // deleteComment: {
-    //   type: CommentType,
-    //   args: {
-    //     id: { type: GraphQLNonNull(GraphQLID) },
-    //   },
-    //   async resolve(parent, { id }) {
-    //     let comment: DocumentType;
-    //     const session = await startSession();
-    //     try {
-    //       session.startTransaction({ session });
-    //       comment = await Comment.findById(id);
-    //       if (!comment) {
-    //         throw new Error("Comment not found!");
-    //       }
-    //       //@ts-ignore
-    //       const existingUser = await User.findById(comment?.user);
-    //       if (!existingUser) {
-    //         throw new Error("User not found!");
-    //       }
-    //       //@ts-ignore
-    //       const existingPoem = Poem.findById(comment?.poem);
-    //       if (!existingPoem) {
-    //         throw new Error("Poem not found!");
-    //       }
-    //       existingUser.comments.pull(comment);
-    //       existingPoem.comments.pull(comment);
-    //       await existingUser.save({ session });
-    //       await existingPoem.save({ session });
-    //       return await comment.remove({ session });
-    //     } catch (err) {
-    //       throw new Error(err);
-    //     }
-    //   },
-    // },
+    // delete comment from poem
+    deleteComment: {
+      type: CommentType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, { id }) {
+        let comment: DocumentType;
+        const session = await startSession();
+        try {
+          session.startTransaction({ session });
+          comment = await Comment.findById(id);
+          if (!comment) {
+            throw new Error("Comment not found!");
+          }
+          //@ts-ignore
+          const existingUser = await User.findById(comment?.user);
+          if (!existingUser) {
+            throw new Error("User not found!");
+          }
+          //@ts-ignore
+          const existingPoem = await Poem.findById(comment?.poem);
+          if (!existingPoem) {
+            throw new Error("Poem not found!");
+          }
+          existingUser.comments.pull(comment);
+          existingPoem.comments.pull(comment);
+          await existingUser.save({ session });
+          await existingPoem.save({ session });
+          return await comment.deleteOne({ id: comment.id });
+        } catch (err) {
+          throw new Error(err);
+        }
+      },
+    },
   },
 });
 
