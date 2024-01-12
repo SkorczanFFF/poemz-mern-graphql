@@ -5,7 +5,7 @@ import { USER_SIGNIN, USER_SIGNUP } from "../../mutations/mutations";
 import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
 import { authStyles } from "../../styles/auth.styles";
 import { useDispatch, useSelector } from "react-redux";
-import { authAuctions } from "../../store/auth-slice";
+import { authActions } from "../../store/auth-slice";
 import { useNavigate } from "react-router-dom";
 
 type FormInputs = {
@@ -36,8 +36,8 @@ const Auth = () => {
         if (res.data) {
           const { id, email, name } = res.data.signin;
           localStorage.setItem("userData", JSON.stringify({ id, name, email }));
-          dispatch(authAuctions.login());
-          dispatch(authAuctions.setName(res.data.signin.name));
+          dispatch(authActions.login());
+          dispatch(authActions.setName(res.data.signin.name));
           return navigate("/profile");
         }
       } catch (err) {
@@ -50,7 +50,7 @@ const Auth = () => {
         if (res.data) {
           const { id, email, name } = res.data.signup;
           localStorage.setItem("userData", JSON.stringify({ id, name, email }));
-          dispatch(authAuctions.logout());
+          dispatch(authActions.logout());
         }
       } catch (err) {
         console.log(err);

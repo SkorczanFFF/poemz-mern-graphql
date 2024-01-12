@@ -17,4 +17,4 @@ export const authSlice = createSlice({
   },
 });
 
-export const authAuctions = authSlice.actions;
+export const authActions = authSlice.actions;

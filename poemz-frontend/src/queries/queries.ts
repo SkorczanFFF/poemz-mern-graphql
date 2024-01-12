@@ -13,3 +13,17 @@ export const GET_POEMS = gql`
     }
   }
 `;
+
+export const GET_RANDOM_POEM = gql`
+  {
+    randomPoem {
+      id
+      title
+      date
+      content
+      user {
+        name
+      }
+    }
+  }
+`;

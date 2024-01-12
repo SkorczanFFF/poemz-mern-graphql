@@ -19,3 +19,13 @@ export const USER_SIGNUP = gql`
     }
   }
 `;
+
+export const USER_DELETE = gql`
+  mutation deleteUser($id: String!) {
+    deleteUser(id: $id) {
+      id
+      email
+      name
+    }
+  }
+`;

@@ -6,7 +6,7 @@ import Poems from "./components/Poems/Poems";
 import Auth from "./components/Auth/Auth";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { authAuctions } from "./store/auth-slice";
+import { authActions } from "./store/auth-slice";
 import Profile from "./components/Profile/Profile";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     const data = localStorage.getItem("userData") as string;
     if (JSON.parse(data) !== null) {
-      dispatch(authAuctions.login());
+      dispatch(authActions.login());
     }
   }, []);
   return (
