@@ -49,31 +49,14 @@ const RootQuery = new GraphQLObjectType({
         return await Comment.find();
       },
     },
-    //single poem for 24h
     randomPoem: {
       type: PoemType,
       async resolve() {
-        if (
-          cachedRandomPoem &&
-          cachedTime &&
-          Date.now() - cachedTime < 24 * 60 * 60 * 1000
-        ) {
-          return cachedRandomPoem;
-        } else {
-          const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-          const randomPoem = await Poem.aggregate([
-            { $match: { createdAt: { $gte: twentyFourHoursAgo } } },
-            { $sample: { size: 1 } },
-          ]);
-          if (randomPoem.length > 0) {
-            cachedRandomPoem = randomPoem[0];
-            cachedTime = Date.now();
-            return cachedRandomPoem;
-          } else {
-            // Handle scenario where no poem is found within the last 24 hours
-            return null; // Or handle differently based on your requirements
-          }
-        }
+        // Implement logic to fetch a random poem
+        const randomPoem = await Poem.aggregate([{ $sample: { size: 1 } }]);
+
+        // Return the randomly selected poem or null if no poem is found
+        return randomPoem.length > 0 ? randomPoem[0] : null;
       },
     },
   },

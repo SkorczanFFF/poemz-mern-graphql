@@ -39,12 +39,21 @@ const Profile = () => {
     }
   };
 
+  const logout = () => {
+    localStorage.clear();
+    dispatch(authActions.logout());
+    navigate("/");
+  };
+
   return (
     <div>
       <Box sx={profileStyles.container}>
         {/* <Button sx={profileStyles.deleteUserButton} onClick={deleteUserAccount(userId)}>
           Delete account
         </Button> */}
+        <Button sx={profileStyles.logoutUserButton} onClick={logout}>
+          Logout
+        </Button>
       </Box>
     </div>
   );

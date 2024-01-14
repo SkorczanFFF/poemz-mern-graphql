@@ -8,13 +8,21 @@ export const profileStyles: Styles = {
   container: {
     backgroundColor: "#213721",
     color: "#FFFFFF",
-    height: "40px",
+    minHeight: "90vh",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   deleteUserButton: {
     backgroundColor: "#ed0018",
+    color: "white",
+    ":hover": {
+      backgroundColor: "orange",
+      transitionDuration: "0.5",
+    },
+  },
+  logoutUserButton: {
+    backgroundColor: "#FCBA03",
     color: "white",
     ":hover": {
       backgroundColor: "orange",

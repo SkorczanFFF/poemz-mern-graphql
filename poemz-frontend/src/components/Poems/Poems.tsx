@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_POEMS } from "../../queries/queries";
 import { poemStyles } from "../../styles/poems.styles";
