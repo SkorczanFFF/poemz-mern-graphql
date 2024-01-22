@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { authActions } from "./store/auth-slice";
 import Profile from "./components/Profile/Profile";
+import AddPoem from "./components/AddPoem/AddPoem";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function App() {
         <Route path="/poems" element={<Poems />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/addPoem" element={<AddPoem />} />
       </Routes>
       <Footer />
     </>

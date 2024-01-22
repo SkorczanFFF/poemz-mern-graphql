@@ -17,10 +17,16 @@ const Home = () => {
     <Box sx={homeStyles.container}>
       <Box sx={homeStyles.hello}>Poem of the day</Box>
       {data ? (
-        <Box>
-          <Typography>Random Poem:</Typography>
-          <Typography>{data?.title}</Typography>
-          <Typography>{data?.content}</Typography>
+        <Box sx={homeStyles.randomPoem}>
+          <Box sx={homeStyles.randomPoemDetails}>
+            <Typography sx={homeStyles.randomPoemTitle}>
+              {data?.title ? data?.title : "title"}
+            </Typography>
+            <Typography sx={homeStyles.randomPoemDate}>{"ddata"}</Typography>
+          </Box>
+          <Typography sx={homeStyles.randomPoemContent}>
+            {data?.content ? data?.content : "content"}
+          </Typography>
         </Box>
       ) : (
         <p>No random poem available.</p>

@@ -35,6 +35,14 @@ const RootQuery = new GraphQLObjectType({
         return await User.find();
       },
     },
+    //get use by id
+    user: {
+      type: UserType,
+      args: { id: { type: GraphQLNonNull(GraphQLID) } },
+      async resolve(parent, { id }) {
+        return User.findById(id).populate("poems");
+      },
+    },
     //get all poems
     poems: {
       type: GraphQLList(PoemType),
@@ -129,9 +137,10 @@ const mutations = new GraphQLObjectType({
         const session = await startSession();
         try {
           session.startTransaction({ session });
-          existingUser = await User.findById(id)
-            .populate("poems")
-            .populate("comments");
+          existingUser = await User.findById(id).populate([
+            "poems",
+            "comments",
+          ]);
 
           if (!existingUser) {
             throw new Error("User not found.");
