@@ -47,6 +47,13 @@ const Profile = () => {
         <Button sx={profileStyles.logoutUserButton} onClick={logout}>
           Logout
         </Button>
+        <Button
+          sx={profileStyles.addPoemButton}
+          onClick={() => navigate("/addPoem")}
+        >
+          {" "}
+          Add Poem
+        </Button>
       </Box>
     </div>
   );

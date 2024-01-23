@@ -28,5 +28,13 @@ export const profileStyles: Styles = {
       backgroundColor: "orange",
       transitionDuration: "0.5",
     },
+    addPoemButton: {
+      backgroundColor: "#7f43ba",
+      color: "white",
+      ":hover": {
+        backgroundColor: "orange",
+        transitionDuration: "0.5",
+      },
+    },
   },
 };
