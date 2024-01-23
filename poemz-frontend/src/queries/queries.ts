@@ -13,3 +13,29 @@ export const GET_POEMS = gql`
     }
   }
 `;
+
+export const GET_RANDOM_POEM = gql`
+  {
+    randomPoem {
+      id
+      title
+      date
+      content
+      user {
+        name
+      }
+    }
+  }
+`;
+
+export const GET_USER_POEMS = gql`
+  query user($id: ID!) {
+    user(id: $id) {
+      blogs {
+        title
+        content
+        date
+      }
+    }
+  }
+`;

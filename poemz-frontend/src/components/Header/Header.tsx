@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { headerStyles } from "../../styles/header.styles";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import LoggedIn from "./Partials/LoggedIn";
 
 const Header = () => {
   const isLogged = useSelector((state: any) => state.isLogged);
@@ -36,6 +37,7 @@ const Header = () => {
               <Button LinkComponent={Link} to="/profile">
                 Profile
               </Button>
+              <LoggedIn />
             </>
           ) : (
             <>

@@ -14,6 +14,16 @@ import { Document, startSession } from "mongoose";
 import { compareSync, hashSync } from "bcryptjs";
 
 type DocumentType = Document<any, any, any>;
+type CachedPoem = {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+  user: string;
+};
+
+let cachedRandomPoem: CachedPoem | null = null;
+let cachedTime: number | null = null;
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQuery",
@@ -23,6 +33,14 @@ const RootQuery = new GraphQLObjectType({
       type: GraphQLList(UserType),
       async resolve() {
         return await User.find();
+      },
+    },
+    //get use by id
+    user: {
+      type: UserType,
+      args: { id: { type: GraphQLNonNull(GraphQLID) } },
+      async resolve(parent, { id }) {
+        return User.findById(id).populate("poems");
       },
     },
     //get all poems
@@ -37,6 +55,16 @@ const RootQuery = new GraphQLObjectType({
       type: GraphQLList(CommentType),
       async resolve() {
         return await Comment.find();
+      },
+    },
+    randomPoem: {
+      type: PoemType,
+      async resolve() {
+        // Implement logic to fetch a random poem
+        const randomPoem = await Poem.aggregate([{ $sample: { size: 1 } }]);
+
+        // Return the randomly selected poem or null if no poem is found
+        return randomPoem.length > 0 ? randomPoem[0] : null;
       },
     },
   },
@@ -98,6 +126,66 @@ const mutations = new GraphQLObjectType({
         }
       },
     },
+    //user delete
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, { id }) {
+        let existingUser;
+        const session = await startSession();
+        try {
+          session.startTransaction({ session });
+          existingUser = await User.findById(id).populate([
+            "poems",
+            "comments",
+          ]);
+
+          if (!existingUser) {
+            throw new Error("User not found.");
+          }
+
+          const userPoems = existingUser.poems;
+          const userComments = existingUser.comments;
+
+          await Comment.deleteMany({
+            _id: { $in: userComments.map((comment) => comment._id) },
+          });
+
+          await Poem.deleteMany({
+            _id: { $in: userPoems.map((poem) => poem._id) },
+          });
+
+          for (const poem of userPoems) {
+            const poemOwner = await User.findById(poem.user);
+            if (poemOwner) {
+              poemOwner.poems.pull(poem);
+              await poemOwner.save({ session });
+            }
+          }
+
+          for (const comment of userComments) {
+            const commentOwner = await User.findById(comment.user);
+            const commentPoem = await Poem.findById(comment.poem);
+
+            if (commentOwner && commentPoem) {
+              commentOwner.comments.pull(comment);
+              commentPoem.comments.pull(comment);
+
+              await commentOwner.save({ session });
+              await commentPoem.save({ session });
+            }
+          }
+          return await existingUser.deleteOne();
+        } catch (err) {
+          throw new Error(err);
+        } finally {
+          await session.commitTransaction();
+        }
+      },
+    },
+
     //add new poem
     addPoem: {
       type: PoemType,
