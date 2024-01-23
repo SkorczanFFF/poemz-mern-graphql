@@ -19,3 +19,26 @@ export const USER_SIGNUP = gql`
     }
   }
 `;
+
+export const USER_DELETE = gql`
+  mutation deleteUser($id: ID!) {
+    deleteUser(id: $id) {
+      id
+      email
+      name
+    }
+  }
+`;
+
+export const ADD_POEM = gql`
+  mutation addPoem(
+    $title: String!
+    $content: String!
+    $date: String!
+    $user: ID!
+  ) {
+    addPoem(title: $title, content: $content, date: $date, user: $user) {
+      title
+    }
+  }
+`;

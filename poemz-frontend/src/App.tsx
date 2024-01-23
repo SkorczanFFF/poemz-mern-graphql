@@ -6,8 +6,9 @@ import Poems from "./components/Poems/Poems";
 import Auth from "./components/Auth/Auth";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { authAuctions } from "./store/auth-slice";
+import { authActions } from "./store/auth-slice";
 import Profile from "./components/Profile/Profile";
+import AddPoem from "./components/AddPoem/AddPoem";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ function App() {
   useEffect(() => {
     const data = localStorage.getItem("userData") as string;
     if (JSON.parse(data) !== null) {
-      dispatch(authAuctions.login());
+      dispatch(authActions.login());
     }
   }, []);
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/poems" element={<Poems />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/addPoem" element={<AddPoem />} />
       </Routes>
       <Footer />
     </>
