@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_POEMS } from "../../queries/queries";
 import { poemStyles } from "../../styles/poems.styles";
-import SinglePoem from "./Partials/SinglePoem";
+import SinglePoem from "./Partials/SinglePoemCard";
 import { Box, Typography } from "@mui/material";
 import { PoemType } from "../../types/types";
 

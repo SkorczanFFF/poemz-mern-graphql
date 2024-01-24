@@ -16,7 +16,7 @@ const Profile = () => {
       const res = await deleteUser({
         variables: {
           //@ts-ignore
-          userId: JSON.parse(localStorage.getItem("userData").id as string),
+          user: JSON.parse(localStorage.getItem("userData").id as string).id,
         },
       });
       console.log(res);
@@ -51,7 +51,6 @@ const Profile = () => {
           sx={profileStyles.addPoemButton}
           onClick={() => navigate("/addPoem")}
         >
-          {" "}
           Add Poem
         </Button>
       </Box>

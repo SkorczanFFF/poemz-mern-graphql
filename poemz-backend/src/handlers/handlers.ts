@@ -35,12 +35,20 @@ const RootQuery = new GraphQLObjectType({
         return await User.find();
       },
     },
-    //get use by id
+    //get user by id
     user: {
       type: UserType,
       args: { id: { type: GraphQLNonNull(GraphQLID) } },
       async resolve(parent, { id }) {
         return User.findById(id).populate("poems");
+      },
+    },
+    //get poem by id
+    poem: {
+      type: PoemType,
+      args: { id: { type: GraphQLNonNull(GraphQLID) } },
+      async resolve(parent, { id }) {
+        return Poem.findById(id).populate("comments");
       },
     },
     //get all poems

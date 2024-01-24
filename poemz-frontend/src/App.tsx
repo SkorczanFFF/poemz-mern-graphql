@@ -9,11 +9,11 @@ import { useEffect } from "react";
 import { authActions } from "./store/auth-slice";
 import Profile from "./components/Profile/Profile";
 import AddPoem from "./components/AddPoem/AddPoem";
+import ViewPoem from "./components/ViewPoem/ViewPoem";
 
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state: any) => state.isLogged);
-  console.log(isLogged);
 
   useEffect(() => {
     const data = localStorage.getItem("userData") as string;
@@ -21,6 +21,7 @@ function App() {
       dispatch(authActions.login());
     }
   }, []);
+
   return (
     <>
       <Header />
@@ -30,6 +31,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/addPoem" element={<AddPoem />} />
+        <Route path="/poem/:id" element={<ViewPoem />} />
       </Routes>
       <Footer />
     </>
