@@ -42,3 +42,19 @@ export const ADD_POEM = gql`
     }
   }
 `;
+
+export const ADD_COMMENT = gql`
+  mutation addCommentToPoem(
+    $text: String!
+    $date: String!
+    $user: ID!
+    $poem: ID!
+  ) {
+    addCommentToPoem(text: $text, date: $date, user: $user, poem: $poem) {
+      text
+      user {
+        name
+      }
+    }
+  }
+`;

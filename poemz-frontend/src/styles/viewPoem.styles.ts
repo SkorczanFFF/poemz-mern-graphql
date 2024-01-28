@@ -12,6 +12,27 @@ export const viewPoemStyles: Styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+  },
+  poemContainer: {
+    margin: "60px 0",
+    textAlign: "center",
+  },
+  commentsContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "90%",
+  },
+  addCommentContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    marginTop: "10px",
+    backgroundColor: "tomato",
+  },
+  commentImput: {
+    width: "100%",
+  },
+  sendCommentButton: {
+    backgroundColor: "blue",
   },
 };

@@ -31,7 +31,7 @@ export const GET_RANDOM_POEM = gql`
 export const GET_USER_POEMS = gql`
   query user($id: ID!) {
     user(id: $id) {
-      blogs {
+      poems {
         title
         content
         date
