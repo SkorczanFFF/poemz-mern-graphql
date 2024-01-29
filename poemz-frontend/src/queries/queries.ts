@@ -52,8 +52,10 @@ export const GET_POEM_BY_ID = gql`
       }
       comments {
         text
+        id
         user {
           name
+          id
         }
       }
     }

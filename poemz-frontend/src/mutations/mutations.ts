@@ -54,7 +54,16 @@ export const ADD_COMMENT = gql`
       text
       user {
         name
+        id
       }
+    }
+  }
+`;
+
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($id: ID!) {
+    deleteComment(id: $id) {
+      text
     }
   }
 `;

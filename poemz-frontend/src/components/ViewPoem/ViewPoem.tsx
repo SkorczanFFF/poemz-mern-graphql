@@ -4,26 +4,29 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_POEM_BY_ID } from "../../queries/queries";
 import { useForm } from "react-hook-form";
-import { ADD_COMMENT } from "../../mutations/mutations";
+import { ADD_COMMENT, DELETE_COMMENT } from "../../mutations/mutations";
 
 const ViewPoem = () => {
   const { register, handleSubmit } = useForm();
   const id = useParams().id;
-  const [addCommentToPoem, addCommentResponse] = useMutation(ADD_COMMENT);
-  const { data, error, loading } = useQuery(GET_POEM_BY_ID, {
+  const [addCommentToPoem, addCommentResponse] = useMutation(ADD_COMMENT, {
+    variables: { id },
+  });
+  const [deleteComment] = useMutation(DELETE_COMMENT);
+  const { data, error, loading, refetch } = useQuery(GET_POEM_BY_ID, {
     variables: {
       id,
     },
   });
+  const user: string = JSON.parse(
+    localStorage.getItem("userData") as string
+  ).id;
   const commentHandler = async (data: any) => {
-    const user: string = JSON.parse(
-      localStorage.getItem("userData") as string
-    ).id;
     const date = new Date();
     const text = data?.comment;
 
     try {
-      const res = await addCommentToPoem({
+      await addCommentToPoem({
         variables: {
           text,
           date,
@@ -31,13 +34,25 @@ const ViewPoem = () => {
           user,
         },
       });
-      console.log(res);
+      await refetch();
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log(data?.poem?.comments);
+  const handleCommentDelete = async (id: string) => {
+    try {
+      await deleteComment({
+        variables: {
+          id,
+        },
+      });
+      await refetch();
+      return console.log("done");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     data && (
@@ -68,14 +83,19 @@ const ViewPoem = () => {
           </Box>
           <Box sx={viewPoemStyles.allCommentsContainer}>
             {data?.poem?.comments.map((comment: any, index: number) => (
-              <Paper key={index} elevation={3}>
-                {comment.user.name && typeof comment.user === "string" && (
-                  <Typography variant="body1">{comment.user}</Typography>
+              <Paper key={index}>
+                {comment.user.name && typeof comment.user.name === "string" && (
+                  <Typography variant="body1">{comment.user.name}</Typography>
                 )}
                 {comment.text && typeof comment.text === "string" && (
-                  <Typography variant="body1" gutterBottom>
+                  <Typography variant="body2" gutterBottom>
                     {comment.text}
                   </Typography>
+                )}
+                {user === comment.user.id && (
+                  <Button onClick={() => handleCommentDelete(comment.id)}>
+                    Delete comment
+                  </Button>
                 )}
               </Paper>
             ))}

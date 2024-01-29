@@ -20,7 +20,6 @@ const AddPoem = () => {
       const content = contentRef?.current?.innerText;
       const date = new Date();
       const user = JSON.parse(localStorage.getItem("userData") as string).id;
-      console.log(user);
 
       try {
         const res = await addPoem({
