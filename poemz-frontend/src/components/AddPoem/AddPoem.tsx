@@ -18,7 +18,7 @@ const AddPoem = () => {
     ) {
       const title = titleRef?.current?.innerText;
       const content = contentRef?.current?.innerText;
-      const date = new Date();
+      const date = new Date().toISOString();
       const user = JSON.parse(localStorage.getItem("userData") as string).id;
       console.log(user);
 

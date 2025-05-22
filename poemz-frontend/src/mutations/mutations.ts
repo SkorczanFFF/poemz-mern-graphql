@@ -38,7 +38,49 @@ export const ADD_POEM = gql`
     $user: ID!
   ) {
     addPoem(title: $title, content: $content, date: $date, user: $user) {
+      id
       title
+      content
+      date
+    }
+  }
+`;
+
+export const UPDATE_POEM = gql`
+  mutation updatePoem($id: ID!, $title: String!, $content: String!) {
+    updatePoem(id: $id, title: $title, content: $content) {
+      id
+      title
+      content
+    }
+  }
+`;
+
+export const DELETE_POEM = gql`
+  mutation deletePoem($id: ID!) {
+    deletePoem(id: $id) {
+      id
+    }
+  }
+`;
+
+export const ADD_COMMENT = gql`
+  mutation addComment($text: String!, $date: String!, $user: ID!, $poem: ID!) {
+    addComment(text: $text, date: $date, user: $user, poem: $poem) {
+      id
+      text
+      date
+      user {
+        name
+      }
+    }
+  }
+`;
+
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($id: ID!) {
+    deleteComment(id: $id) {
+      id
     }
   }
 `;

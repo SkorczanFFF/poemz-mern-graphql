@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { authActions } from "./store/auth-slice";
 import Profile from "./components/Profile/Profile";
 import AddPoem from "./components/AddPoem/AddPoem";
+import EditPoem from "./components/EditPoem/EditPoem";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,11 +17,12 @@ function App() {
   console.log(isLogged);
 
   useEffect(() => {
-    const data = localStorage.getItem("userData") as string;
-    if (JSON.parse(data) !== null) {
+    const data = localStorage.getItem("userData");
+    if (data && JSON.parse(data) !== null) {
       dispatch(authActions.login());
+      dispatch(authActions.setName(JSON.parse(data).name));
     }
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <Header />
@@ -29,7 +31,8 @@ function App() {
         <Route path="/poems" element={<Poems />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/addPoem" element={<AddPoem />} />
+        <Route path="/add-poem" element={<AddPoem />} />
+        <Route path="/edit-poem/:id" element={<EditPoem />} />
       </Routes>
       <Footer />
     </>

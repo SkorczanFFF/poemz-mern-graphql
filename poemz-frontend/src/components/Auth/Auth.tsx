@@ -2,7 +2,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { USER_SIGNIN, USER_SIGNUP } from "../../mutations/mutations";
-import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputLabel,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { authStyles } from "../../styles/auth.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/auth-slice";
@@ -17,9 +24,9 @@ type FormInputs = {
 const Auth = () => {
   const navigate = useNavigate();
   const isLogged = useSelector((state: any) => state.isLogged);
-  console.log(isLogged);
   const dispatch = useDispatch();
   const [loginSelected, setLoginSelected] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [signin] = useMutation(USER_SIGNIN);
   const [signup] = useMutation(USER_SIGNUP);
   const {
@@ -29,31 +36,39 @@ const Auth = () => {
   } = useForm<FormInputs>();
 
   const onSubmit = async ({ name, email, password }: FormInputs) => {
+    setError(null);
+
     if (loginSelected) {
-      //login
+      // login
       try {
         const res = await signin({ variables: { email, password } });
         if (res.data) {
           const { id, email, name } = res.data.signin;
           localStorage.setItem("userData", JSON.stringify({ id, name, email }));
           dispatch(authActions.login());
-          dispatch(authActions.setName(res.data.signin.name));
+          dispatch(authActions.setName(name));
+          dispatch(authActions.setUserId(id));
           return navigate("/profile");
         }
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "Login failed. Please check your credentials.");
       }
     } else {
-      //register
+      // register
       try {
         const res = await signup({ variables: { name, email, password } });
         if (res.data) {
           const { id, email, name } = res.data.signup;
           localStorage.setItem("userData", JSON.stringify({ id, name, email }));
-          dispatch(authActions.logout());
+          dispatch(authActions.login());
+          dispatch(authActions.setName(name));
+          dispatch(authActions.setUserId(id));
+          return navigate("/profile");
         }
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "Registration failed. Please try again.");
       }
     }
   };
@@ -64,6 +79,13 @@ const Auth = () => {
         <Typography variant="h4" sx={authStyles.heading}>
           {loginSelected ? "Login" : "Register"}
         </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
         <Box sx={authStyles.authContainer}>
           <form
             style={authStyles.formSection as React.CSSProperties}
@@ -76,8 +98,15 @@ const Auth = () => {
                   aria-label="name"
                   label="Name"
                   sx={authStyles.input}
-                  error={Boolean(errors.email)}
-                  {...register("name", { required: true, minLength: 2 })}
+                  error={Boolean(errors.name)}
+                  helperText={errors.name?.message}
+                  {...register("name", {
+                    required: "Name is required",
+                    minLength: {
+                      value: 2,
+                      message: "Name must be at least 2 characters",
+                    },
+                  })}
                 />
               </>
             )}
@@ -85,13 +114,15 @@ const Auth = () => {
             <TextField
               aria-label="email"
               label="Email"
-              type="mail"
+              type="email"
               sx={authStyles.input}
               error={Boolean(errors.email)}
+              helperText={errors.email?.message}
               {...register("email", {
-                required: true,
+                required: "Email is required",
                 validate: (val: string) =>
-                  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+                  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ||
+                  "Invalid email format",
               })}
             />
             <InputLabel aria-label="password" />
@@ -100,14 +131,13 @@ const Auth = () => {
               label="Password"
               type="password"
               error={Boolean(errors.password)}
-              helperText={
-                Boolean(errors.password)
-                  ? "Length of the password must be at least 8 characters"
-                  : ""
-              }
+              helperText={errors.password?.message}
               {...register("password", {
-                required: true,
-                minLength: 8,
+                required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
               })}
             />
             <Button type="submit" sx={authStyles.submitBtn}>

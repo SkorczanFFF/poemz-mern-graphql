@@ -16,6 +16,7 @@ export type PoemType = {
 };
 
 export type CommentType = {
+  id: string;
   text: string;
   date: Date;
   poem: PoemType;
