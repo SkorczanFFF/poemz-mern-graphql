@@ -1,42 +1,52 @@
+import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Footer from "./components/Footer/Footer";
-import Header from "./components/Header/Header";
+import { ThemeProvider } from "@mui/material";
+import { Provider } from "react-redux";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { theme } from "./styles/theme";
+import { store } from "./store";
+import Layout from "./components/Layout/Layout";
+
+// Pages
 import Home from "./components/Home/Home";
-import Poems from "./components/Poems/Poems";
-import Auth from "./components/Auth/Auth";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { authActions } from "./store/auth-slice";
-import Profile from "./components/Profile/Profile";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import PoemList from "./components/Poems/PoemList";
+import PoemDetail from "./components/Poems/PoemDetail";
 import AddPoem from "./components/AddPoem/AddPoem";
 import EditPoem from "./components/EditPoem/EditPoem";
+import Profile from "./components/Profile/Profile";
+import NotFound from "./components/NotFound/NotFound";
 
-function App() {
-  const dispatch = useDispatch();
-  const isLogged = useSelector((state: any) => state.isLogged);
-  console.log(isLogged);
+// Create Apollo Client
+const client = new ApolloClient({
+  uri: process.env.REACT_APP_API_URL || "http://localhost:4000/graphql",
+  cache: new InMemoryCache(),
+  credentials: "include",
+});
 
-  useEffect(() => {
-    const data = localStorage.getItem("userData");
-    if (data && JSON.parse(data) !== null) {
-      dispatch(authActions.login());
-      dispatch(authActions.setName(JSON.parse(data).name));
-    }
-  }, [dispatch]);
+const App: React.FC = () => {
   return (
-    <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/poems" element={<Poems />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/add-poem" element={<AddPoem />} />
-        <Route path="/edit-poem/:id" element={<EditPoem />} />
-      </Routes>
-      <Footer />
-    </>
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/poems" element={<PoemList />} />
+              <Route path="/poems/:id" element={<PoemDetail />} />
+              <Route path="/poems/new" element={<AddPoem />} />
+              <Route path="/poems/edit/:id" element={<EditPoem />} />
+              <Route path="/profile/:id" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </ThemeProvider>
+      </Provider>
+    </ApolloProvider>
   );
-}
+};
 
 export default App;

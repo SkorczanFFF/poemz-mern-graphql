@@ -15,6 +15,9 @@ export const poemStyles: Styles = {
   },
   heading: {
     padding: "20px 0",
+    fontFamily: "'Meow Script'",
+    fontWeight: 700,
+    fontSize: "3rem",
   },
   poemContainer: {
     width: "1200px",
@@ -35,6 +38,9 @@ export const poemStyles: Styles = {
   },
   poemTitle: {
     padding: "0",
+    fontFamily: "'Meow Script'",
+    fontWeight: 700,
+    fontSize: "2.5rem",
   },
   poemDetails: {
     display: "flex",

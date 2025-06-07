@@ -73,3 +73,48 @@ export const CommentType = new GraphQLObjectType({
     },
   }),
 });
+
+const typeDefs = `
+  type User {
+    _id: ID!
+    name: String!
+    email: String!
+    password: String!
+  }
+
+  type Poem {
+    _id: ID!
+    title: String!
+    content: String!
+    date: String!
+    user: User!
+    comments: [Comment!]!
+  }
+
+  type Comment {
+    _id: ID!
+    text: String!
+    date: String!
+    user: User!
+    poem: Poem!
+  }
+
+  type Query {
+    poems: [Poem!]!
+    poem(id: ID!): Poem
+    poemOfTheDay: Poem
+    topRatedPoems: [Poem!]!
+    user(id: ID!): User
+    users: [User!]!
+  }
+
+  type Mutation {
+    createPoem(title: String!, content: String!): Poem!
+    updatePoem(id: ID!, title: String!, content: String!): Poem!
+    deletePoem(id: ID!): Poem!
+    createComment(poemId: ID!, text: String!): Comment!
+    deleteComment(id: ID!): Comment!
+    register(name: String!, email: String!, password: String!): User!
+    login(email: String!, password: String!): User!
+  }
+`;
