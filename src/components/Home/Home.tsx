@@ -93,7 +93,7 @@ const Home: React.FC = () => {
       return (
         <Grid container spacing={2}>
           {[1, 2, 3, 4, 5].map((key) => (
-            <Grid item xs={12} key={key}>
+            <Grid size={12} key={key}>
               <Card>
                 <CardContent>
                   <Skeleton variant="text" height={30} />
@@ -118,7 +118,7 @@ const Home: React.FC = () => {
     return (
       <Grid container spacing={2}>
         {topPoemsData?.topRatedPoems.map((poem: any, index: number) => (
-          <Grid item xs={12} key={poem._id}>
+          <Grid size={12} key={poem._id}>
             <Paper
               elevation={1}
               sx={{

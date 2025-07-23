@@ -22,7 +22,7 @@ const PoemList: React.FC = () => {
     return (
       <Grid container spacing={3}>
         {[1, 2, 3, 4].map((key) => (
-          <Grid item xs={12} sm={6} md={4} key={key}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={key}>
             <Card>
               <CardContent>
                 <Skeleton variant="text" height={40} />
@@ -68,7 +68,7 @@ const PoemList: React.FC = () => {
 
       <Grid container spacing={3}>
         {data.poems.map((poem: Poem) => (
-          <Grid item xs={12} sm={6} md={4} key={poem._id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={poem._id}>
             <Card
               sx={{
                 height: "100%",
