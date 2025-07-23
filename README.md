@@ -1,169 +1,213 @@
-# Poemz - MERN Stack Poetry Application
+# Poemz Frontend
 
-A full-stack web application for creating and sharing poems, built with the MERN stack (MongoDB, Express.js, React, Node.js) and GraphQL.
+A modern React-based frontend for the Poemz application, built with TypeScript and Material-UI.
 
-## Project Overview
+## Repository History
 
-Poemz is a modern poetry platform that allows users to create, share, and interact with poetry. The application features a GraphQL API backend and a React-based frontend with Material-UI components, offering a seamless and responsive user experience.
+**Note**: On 23.08.2025, the backend was split from this repository into a separate dedicated backend repository for better maintainability and deployment flexibility. The backend can now be found at: [@SkorczanFFF/poemz-backend](https://github.com/SkorczanFFF/poemz-backend)
 
-## Key Features
+This repository now contains only the React frontend application.
 
-- **User Authentication**
+## Tech Stack
 
-  - Secure login and registration
-  - JWT-based authentication
-  - Protected routes and actions
+- **Framework**: React 18 with TypeScript
+- **State Management**: Redux Toolkit
+- **API Client**: Apollo Client for GraphQL
+- **UI Library**: Material-UI (MUI) v5
+- **Routing**: React Router v6
+- **Forms**: React Hook Form v7
+- **Type Checking**: TypeScript v4.9
 
-- **Poetry Management**
+## Features
 
-  - Create, read, update, and delete poems
-  - Rich text formatting
-  - Poem of the day feature
-  - Top rated poems showcase
+### User Interface
 
-- **Social Features**
+- Responsive Material-UI design
+- Dark/Light theme support
+- Custom theme configuration
+- Loading states with skeleton placeholders
+- Error boundaries and error handling
+- Toast notifications (coming soon)
 
-  - Comment on poems
-  - User profiles
-  - Author attribution
+### Authentication
 
-- **Modern UI/UX**
-  - Responsive Material-UI design
-  - Dark/Light theme support
-  - Loading states and transitions
-  - Error handling and feedback
+- User registration with validation
+- Secure login system
+- Protected routes
+- User session management
+- Profile management
 
-## Architecture
+### Poetry Features
 
-The project is split into two main parts:
+- View all poems with pagination
+- Poem of the day showcase
+- Top rated poems section
+- Create new poems with rich text
+- Edit and delete own poems
+- Comment system on poems
+- Author attribution
 
-- **Backend (`/poemz-backend`)**
+### Navigation
 
-  - Node.js/Express.js server
-  - GraphQL API with express-graphql
-  - MongoDB with Mongoose
-  - TypeScript implementation
-  - JWT Authentication
+- Header with dynamic navigation
+- Active tab tracking
+- User menu with profile access
+- Responsive mobile menu
+- 404 page handling
 
-- **Frontend (`/poemz-frontend`)**
-  - React with TypeScript
-  - Apollo Client for GraphQL
-  - Redux Toolkit for state management
-  - Material-UI components
-  - React Router for navigation
-  - React Hook Form for form handling
+## Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── Auth/            # Authentication components
+│   ├── Header/          # Navigation components
+│   ├── Poems/           # Poetry-related components
+│   ├── Layout/          # Layout components
+│   └── Common/          # Shared components
+├── store/               # Redux store configuration
+│   └── slices/          # Redux slices
+├── queries/             # GraphQL queries
+├── mutations/           # GraphQL mutations
+├── types/               # TypeScript type definitions
+├── styles/              # Global styles and theme
+└── utils/              # Helper functions
+```
+
+## Component Library
+
+### Layout Components
+
+- `Layout`: Main layout wrapper
+- `Header`: Navigation bar with user menu
+- `Footer`: Application footer
+- `NotFound`: 404 error page
+
+### Authentication Components
+
+- `Login`: User login form
+- `Register`: User registration form
+- `ProtectedRoute`: Route guard component
+
+### Poetry Components
+
+- `PoemList`: Grid view of all poems
+- `PoemDetail`: Single poem view with comments
+- `AddPoem`: Poem creation form
+- `EditPoem`: Poem editing form
+- `PoemOfTheDay`: Featured poem component
+- `TopRatedPoems`: Top poems showcase
+
+### Common Components
+
+- `LoadingSkeleton`: Loading placeholder
+- `ErrorBoundary`: Error handling wrapper
+- `AlertDialog`: Confirmation dialogs
+- `CommentSection`: Reusable comments
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js (v14 or higher)
-- MongoDB instance
 - npm or yarn package manager
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository
+2. Install dependencies:
 
 ```bash
-git clone https://github.com/yourusername/poemz-mern-graphql.git
-cd poemz-mern-graphql
-```
-
-2. Install backend dependencies:
-
-```bash
-cd poemz-backend
 npm install
 ```
 
-3. Install frontend dependencies:
-
-```bash
-cd ../poemz-frontend
-npm install
-```
-
-4. Set up environment variables:
-
-Backend (`.env` in `/poemz-backend`):
-
-```
-MONGODB_URI=your_mongodb_connection_string
-PORT=4000
-JWT_SECRET=your_jwt_secret
-```
-
-Frontend (`.env` in `/poemz-frontend`):
+3. Create a `.env` file:
 
 ```
 REACT_APP_API_URL=http://localhost:4000/graphql
 ```
 
-### Running the Application
+### Development
 
-1. Start the backend server:
-
-```bash
-cd poemz-backend
-npm run dev
-```
-
-2. Start the frontend development server:
+Start the development server:
 
 ```bash
-cd poemz-frontend
 npm start
 ```
 
-The application will be available at:
+The application will be available at `http://localhost:3000`
 
-- Frontend: http://localhost:3000
-- GraphQL Playground: http://localhost:4000/graphql
+### Building for Production
 
-## Project Structure
+Create a production build:
 
-```
-poemz-mern-graphql/
-├── poemz-backend/        # Backend server
-│   ├── src/
-│   │   ├── models/      # MongoDB models
-│   │   ├── schema/      # GraphQL schema
-│   │   ├── resolvers/   # GraphQL resolvers
-│   │   └── utils/       # Helper functions
-│   └── package.json
-│
-└── poemz-frontend/      # Frontend application
-    ├── src/
-    │   ├── components/  # React components
-    │   ├── store/       # Redux store
-    │   ├── queries/     # GraphQL queries
-    │   ├── mutations/   # GraphQL mutations
-    │   └── styles/      # Theme and styles
-    └── package.json
+```bash
+npm run build
 ```
 
-## Development
+## Available Scripts
 
-For detailed development information:
+- `npm start` - Start development server
+- `npm run build` - Create production build
+- `npm test` - Run tests
+- `npm run eject` - Eject from Create React App
 
-- [Backend Documentation](./poemz-backend/README.md)
-- [Frontend Documentation](./poemz-frontend/README.md)
+## State Management
+
+The application uses Redux Toolkit for state management:
+
+### Store Structure
+
+- `auth`: Authentication state
+- `poems`: Poetry-related state
+- `ui`: UI-related state (theme, notifications)
+
+### Redux Slices
+
+- `authSlice`: User authentication
+- `poemSlice`: Poetry management
+- `uiSlice`: UI state management
+
+## GraphQL Integration
+
+### Queries
+
+- `GET_POEMS`: Fetch all poems
+- `GET_POEM`: Fetch single poem
+- `GET_POEM_OF_THE_DAY`: Fetch featured poem
+- `GET_TOP_RATED_POEMS`: Fetch top poems
+
+### Mutations
+
+- `CREATE_POEM`: Create new poem
+- `UPDATE_POEM`: Update existing poem
+- `DELETE_POEM`: Delete poem
+- `CREATE_COMMENT`: Add comment
+- `DELETE_COMMENT`: Remove comment
+
+## Styling
+
+The application uses Material-UI's styling solution with:
+
+- Custom theme configuration
+- Responsive design utilities
+- CSS-in-JS with emotion
+- Global style overrides
+- Component-specific styles
+
+## Testing
+
+Coming soon:
+
+- Unit tests with Jest
+- Component tests with React Testing Library
+- Integration tests
+- E2E tests with Cypress
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the ISC License.
-
-## Acknowledgments
-
-- MongoDB for the database
-- Apollo Client for GraphQL integration
-- Material-UI for the component library
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
